@@ -1,0 +1,42 @@
+captainVersion: 4
+services:
+    $$cap_appname:
+        image: quay.io/soketi/soketi:$$cap_soketi_version
+        restart: always
+        environment:
+            METRICS_ENABLED: $$cap_metrics_enable
+        ports:
+            - $$cap_soketi_port:6001
+            - $$cap_soketi_port2:9601
+        hostname: $$cap_appname.$$cap_root_domain
+caproverOneClickApp:
+    variables:
+        - id: $$cap_soketi_version
+          label: soketi Version
+          defaultValue: 0.32.0-16-alpine
+          description: Check out their Docker page for the valid tags https://quay.io/repository/soketi/soketi?tab=tags
+          validRegex: /^([^\s^\/])+$/
+        - id: $$cap_soketi_port
+          label: soketi port
+          defaultValue: '6001'
+          description: The port used to access soketi
+          validRegex: /\d/
+        - id: $$cap_soketi_port2
+          label: soketi Port2
+          defaultValue: '9601'
+          description: another port that gets exposed on the docker image
+          validRegex: /\d/
+        - id: $$cap_metrics_enable
+          label: enable promethues metrics end point
+          defaultValue: '0'
+          description: default is off, set to 1 to turn on the promethues metrics endpoint.
+          validRegex: /\d/
+    instructions:
+        start: >-
+            soketi is your simple, fast, and resilient open-source WebSockets server
+        end: >-
+            soketi is deployed and available as http://$$cap_appname.$$cap_root_domain.
+            with ports: 6001 & 9601 by default 
+    displayName: soketi
+    description: soketi websoket app
+    documentation: Taken from https://docs.soketi.app/getting-started/installation/docker
